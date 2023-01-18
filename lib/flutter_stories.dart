@@ -49,6 +49,7 @@ class Story extends StatefulWidget {
     required this.momentCount,
     this.onFlashForward,
     this.onFlashBack,
+    this.onIndexChanged,
     this.progressSegmentBuilder = Story.instagramProgressSegmentBuilder,
     this.progressSegmentGap = 2.0,
     this.progressOpacityDuration = const Duration(milliseconds: 300),
@@ -79,6 +80,12 @@ class Story extends StatefulWidget {
   /// Sets the number of moments in story
   ///
   final int momentCount;
+
+  ///
+  /// Notify when the story index has changed
+  ///
+
+  final Function(int index)? onIndexChanged;
 
   ///
   /// Gets executed when user taps the right portion of the screen
@@ -164,6 +171,7 @@ class _StoryState extends State<Story> with SingleTickerProviderStateMixin {
     } else if (_currentIdx + 1 < widget.momentCount) {
       _controller.reset();
       setState(() => _currentIdx += 1);
+      if (widget.onIndexChanged != null) widget.onIndexChanged!(_currentIdx);
       _controller.duration = widget.momentDurationGetter(_currentIdx);
       _controller.forward();
     } else if (_currentIdx == widget.momentCount - 1) {
@@ -179,6 +187,7 @@ class _StoryState extends State<Story> with SingleTickerProviderStateMixin {
       _controller.reset();
       if (_currentIdx - 1 >= 0) {
         setState(() => _currentIdx -= 1);
+        if (widget.onIndexChanged != null) widget.onIndexChanged!(_currentIdx);
       }
       _controller.duration = widget.momentDurationGetter(_currentIdx);
       _controller.forward();
