@@ -221,6 +221,8 @@ class _StoryState extends State<Story> with SingleTickerProviderStateMixin {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
           overlays: SystemUiOverlay.values);
 
+  AnimationController get obtenerControlador => _controller;
+
   @override
   void initState() {
     if (widget.fullscreen) {
