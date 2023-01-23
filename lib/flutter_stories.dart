@@ -47,6 +47,7 @@ class Story extends StatefulWidget {
     required this.momentBuilder,
     required this.momentDurationGetter,
     required this.momentCount,
+    required this.onSetAnimationController,
     this.onFlashForward,
     this.onFlashBack,
     this.onIndexChanged,
@@ -65,6 +66,8 @@ class Story extends StatefulWidget {
         assert(startAt >= 0),
         assert(startAt < momentCount),
         super(key: key);
+
+  final Function(AnimationController controller) onSetAnimationController;
 
   ///
   /// Builder that gets executed executed for each moment
@@ -241,6 +244,10 @@ class _StoryState extends State<Story> with SingleTickerProviderStateMixin {
       });
 
     _controller.forward();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      widget.onSetAnimationController(_controller);
+    });
 
     super.initState();
   }
